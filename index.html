@@ -13,6 +13,16 @@
 @media(max-width:420px){.address{width:45%}.menu{left:0;transform:rotate(-2deg) scale(.88);transform-origin:top left}.menu .menu-x{left:-24px}.welcome{top:132px;font-size:33px;letter-spacing:.12em}.artboard{min-height:610px;margin-top:56px}.p1{left:14%;top:16%}.p2{left:41%;top:36%}.p3{right:1%;top:13%}.p4{right:2%;top:62%}.p5{left:0;top:65%}.project{width:31vw;height:39vw;min-width:102px;min-height:128px}.side-note{right:20%;top:52%}.below-projects{grid-template-columns:1fr}.browser{padding-inline:10px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
+<style>
+.p6{left:39%;top:65%;transform:rotate(-4deg)}
+.thumb-doodle{width:82%;height:67%;border:5px solid #202124;background:#fff;position:relative;box-shadow:inset 0 11px #e8f0f7}
+.thumb-doodle:before{content:"";position:absolute;left:15%;top:47%;width:67%;height:5px;border-radius:5px;background:#e76557;transform:rotate(-24deg);box-shadow:8px 14px 0 #225da8,-5px -13px 0 #ead94f}
+.thumb-doodle:after{content:"♪";position:absolute;right:10%;top:17%;color:#225da8;font-size:25px}
+.modal-link{display:inline-flex;align-items:center;padding:10px 14px;background:var(--blue);color:#fff;text-decoration:none;font-size:12px}
+.modal-link:hover{background:#164b8d}
+@media(max-width:700px){.artboard{min-height:640px}.p6{left:37%;top:69%}}
+@media(max-width:420px){.artboard{min-height:680px}.p6{left:34%;top:72%}}
+</style>
 </head>
 <body>
 <div class="browser">
@@ -28,6 +38,7 @@
     <button class="project p3" data-project="2" aria-label="Open project 3, City Walks"><span class="number">03.</span><div class="thumb"><div class="thumb-camera"></div></div><span class="caption">City Walks</span></button>
     <button class="project p4" data-project="3" aria-label="Open project 4, Everyday Finds"><span class="number">04.</span><div class="thumb"><div class="thumb-cup"></div></div><span class="caption">Everyday Finds</span></button>
     <button class="project p5" data-project="4" aria-label="Open project 5, Little Color Notes"><span class="number">05.</span><div class="thumb"><span class="thumb-flower">✿</span></div><span class="caption">Little Color Notes</span></button>
+    <button class="project p6" data-project="5" aria-label="Open project 6, Melody Maker"><span class="number">06.</span><div class="thumb"><div class="thumb-doodle"></div></div><span class="caption">Melody Maker</span></button>
     <div class="side-note" aria-hidden="true">Objects, colors, and small stories collected along the way.</div>
     <a class="scroll-hint" href="#work">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a>
    </section>
@@ -37,7 +48,7 @@
   </main>
  </div>
 </div>
-<div class="modal" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><article class="modal-card"><button class="modal-close" id="modalClose" type="button" aria-label="Close details">×</button><small id="modalType"></small><h2 id="modalTitle"></h2><p id="modalDescription"></p></article></div>
+<div class="modal" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><article class="modal-card"><button class="modal-close" id="modalClose" type="button" aria-label="Close details">×</button><small id="modalType"></small><h2 id="modalTitle"></h2><p id="modalDescription"></p><a class="modal-link" id="modalLink" href="#" target="_blank" rel="noopener" hidden>Open live project ↗</a></article></div>
 <script>
 // 替换作品时编辑这里：标题、类型、简介；项目图形在上方每个 .thumb 中调整。
 const projects=[
@@ -45,10 +56,11 @@ const projects=[
  {title:"Take It Slow · Editorial Study",type:"Editorial / Typography",description:"Example concept: a journal about white space and slower living. Replace this with your project story and design decisions."},
  {title:"City Walks · Digital Experience",type:"Web design / UI",description:"Example concept: a small digital guide to favorite city corners. Add your project goal, contribution, and highlights."},
  {title:"Everyday Finds · Illustration Series",type:"Illustration / Visual experiments",description:"Example project text. Replace this with a short introduction to your own work."},
- {title:"Little Color Notes · Visual Study",type:"Graphic design / Color study",description:"Example visual study. Replace this with your own title, category, and project details."}
+ {title:"Little Color Notes · Visual Study",type:"Graphic design / Color study",description:"Example visual study. Replace this with your own title, category, and project details."},
+ {title:"Melody Maker · Interactive Drawing Tool",type:"Interactive tool / p5.js + Tone.js",description:"An interactive doodling app with color and brush-size controls, a hand-drawn shake effect, and melodic notes that respond to each stroke.",url:"https://cxu25-debug.github.io/melody-maker/"}
 ];
 const list=document.getElementById('projectList'),modal=document.getElementById('projectModal'),close=document.getElementById('modalClose');let previous=null;
-function showProject(index){const p=projects[index];if(!p)return;previous=document.activeElement;document.getElementById('modalType').textContent=p.type;document.getElementById('modalTitle').textContent=p.title;document.getElementById('modalDescription').textContent=p.description;modal.classList.add('open');close.focus()}
+function showProject(index){const p=projects[index];if(!p)return;previous=document.activeElement;document.getElementById('modalType').textContent=p.type;document.getElementById('modalTitle').textContent=p.title;document.getElementById('modalDescription').textContent=p.description;const link=document.getElementById('modalLink');link.hidden=!p.url;if(p.url)link.href=p.url;modal.classList.add('open');close.focus()}
 document.querySelectorAll('.project').forEach(card=>card.addEventListener('click',()=>showProject(Number(card.dataset.project))));
 projects.forEach((p,i)=>{const b=document.createElement('button');b.className='below-card';b.type='button';b.innerHTML=`<b>${String(i+1).padStart(2,'0')} — ${p.title}</b><span>${p.type}<br>${p.description}</span>`;b.addEventListener('click',()=>showProject(i));list.append(b)});
 function closeModal(){modal.classList.remove('open');previous?.focus()}close.addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))closeModal()});
